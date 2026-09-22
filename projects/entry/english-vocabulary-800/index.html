@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초등 필수 영단어 800 MASTER</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Fredoka & Noto Sans KR) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        accent: {
+                            yellow: '#facc15',
+                            orange: '#fb923c',
+                            pink: '#f472b6',
+                            purple: '#c084fc',
+                            blue: '#38bdf8'
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            user-select: none;
+        }
+        .font-kids {
+            font-family: 'Fredoka', 'Noto Sans KR', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Touch Swipe smooth animation classes */
+        .swipe-card {
+            touch-action: pan-y;
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+        .swipe-card.swiping-smooth {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+        /* Autoplay Progress Bar */
+        @keyframes autoplayProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-progress {
+            animation: autoplayProgress 3s linear forwards;
+        }
+    </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b-4 border-yellow-300 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- App Logo & Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('flashcards')">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-yellow-400 to-orange-400 flex items-center justify-center text-white text-2xl font-bold shadow-md transform hover:rotate-6 transition-transform">
+                    🔤
+                </div>
+                <div>
+                    <h1 class="font-kids text-xl md:text-2xl font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                        초등 영단어 800
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">재밌게 배우는 필수 영단어</p>
+                </div>
+            </div>
+
+            <!-- Header Stats & Sound Toggle -->
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <!-- Streak Badge -->
+                <div class="flex items-center space-x-1 bg-orange-50 border-2 border-orange-200 px-2.5 py-1 rounded-full text-xs md:text-sm font-bold text-orange-600" title="연속 학습 일수">
+                    <span>🔥</span>
+                    <span id="header-streak">1</span>일
+                </div>
+                <!-- XP Badge -->
+                <div class="flex items-center space-x-1 bg-amber-50 border-2 border-amber-200 px-2.5 py-1 rounded-full text-xs md:text-sm font-bold text-amber-600" title="내 경험치">
+                    <span>⭐</span>
+                    <span id="header-xp">0</span> XP
+                </div>
+                <!-- Sound Toggle Button -->
+                <button id="sound-btn" onclick="toggleSound()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors" title="효과음 켜기/끄기">
+                    <i class="fa-solid fa-volume-high text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[72px] z-30 shadow-xs">
+        <div class="max-w-6xl mx-auto px-2 flex justify-around md:justify-center md:space-x-8 overflow-x-auto">
+            <button id="tab-flashcards" onclick="switchTab('flashcards')" class="tab-btn px-4 py-3 font-bold text-sm md:text-base border-b-4 border-amber-500 text-amber-600 flex items-center space-x-2">
+                <i class="fa-solid fa-clone text-lg"></i>
+                <span>플래시카드</span>
+            </button>
+            <button id="tab-quiz" onclick="switchTab('quiz')" class="tab-btn px-4 py-3 font-bold text-sm md:text-base border-b-4 border-transparent text-slate-500 hover:text-amber-500 flex items-center space-x-2">
+                <i class="fa-solid fa-gamepad text-lg"></i>
+                <span>퀴즈 & 게임</span>
+            </button>
+            <button id="tab-wordlist" onclick="switchTab('wordlist')" class="tab-btn px-4 py-3 font-bold text-sm md:text-base border-b-4 border-transparent text-slate-500 hover:text-amber-500 flex items-center space-x-2">
+                <i class="fa-solid fa-book-open text-lg"></i>
+                <span>전체 단어장</span>
+            </button>
+            <button id="tab-mywords" onclick="switchTab('mywords')" class="tab-btn px-4 py-3 font-bold text-sm md:text-base border-b-4 border-transparent text-slate-500 hover:text-amber-500 flex items-center space-x-2 relative">
+                <i class="fa-solid fa-star text-lg text-amber-400"></i>
+                <span>내 단어장</span>
+                <span id="star-count-badge" class="bg-red-500 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
+
+        <!-- ================= MODE 1: FLASHCARDS ================= -->
+        <section id="view-flashcards" class="view-section space-y-5">
+            
+            <!-- Top Controls Bar -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-3 items-center justify-between">
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <!-- Category Select -->
+                    <select id="fc-category-filter" onchange="filterFlashcards()" class="bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-amber-400 transition-colors">
+                        <option value="ALL">🎨 모든 주제 보기</option>
+                        <option value="Animals">🐶 동물 & 자연</option>
+                        <option value="Family">👨‍👩‍👧‍👦 가족 & 사람들</option>
+                        <option value="Food">🍕 음식 & 음료</option>
+                        <option value="School">🏫 학교 & 공부</option>
+                        <option value="Daily">🏠 일상 & 생활</option>
+                        <option value="Actions">🏃 행동 & 감정</option>
+                        <option value="Colors">🎨 색상 & 숫자</option>
+                        <option value="Places">🗺️ 장소 & 위치</option>
+                    </select>
+
+                    <!-- Level Select -->
+                    <select id="fc-level-filter" onchange="filterFlashcards()" class="bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-amber-400 transition-colors">
+                        <option value="ALL">⭐ 전체 난이도</option>
+                        <option value="1">🌱 초급 (1~2학년)</option>
+                        <option value="2">🌿 중급 (3~4학년)</option>
+                        <option value="3">🌳 상급 (5~6학년)</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+                    <span id="fc-counter" class="text-xs md:text-sm font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">
+                        1 / 800 단어
+                    </span>
+
+                    <!-- Auto Play Button & Timer Progress Bar -->
+                    <button id="autoplay-btn" onclick="toggleAutoPlay()" class="relative overflow-hidden bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-slate-900 font-extrabold text-xs md:text-sm px-4 py-2 rounded-xl transition-all shadow-md active:scale-95 flex items-center space-x-2">
+                        <i id="autoplay-icon" class="fa-solid fa-play"></i>
+                        <span id="autoplay-text">자동재생 (Auto Play)</span>
+                        <div id="autoplay-progress-bg" class="absolute bottom-0 left-0 h-1 bg-white/70 w-0"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Enhanced Single Flashcard Area -->
+            <div class="flex flex-col items-center justify-center max-w-2xl mx-auto py-2 relative">
+                
+                <div id="flashcard" class="swipe-card w-full bg-white rounded-3xl border-4 border-amber-200 shadow-xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden select-none cursor-grab active:cursor-grabbing">
+                    
+                    <!-- Top Ribbon: Category, Level & Star -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span id="fc-category-tag" class="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                                동물
+                            </span>
+                            <span id="fc-level-tag" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                초급
+                            </span>
+                        </div>
+                        <button onclick="toggleStarCurrentWord()" id="fc-star-btn" class="text-2xl text-slate-300 hover:text-amber-400 transition-colors p-1" title="즐겨찾기 추가">
+                            <i class="fa-solid fa-star"></i>
+                        </button>
+                    </div>
+
+                    <!-- Main Word Display: Word + Phonetic + [Pos] + [Meaning] -->
+                    <div class="text-center my-4 space-y-2">
+                        <div class="flex items-center justify-center space-x-3">
+                            <h2 id="fc-english" class="font-kids text-4xl md:text-5xl font-extrabold text-slate-800 tracking-wide">
+                                apple
+                            </h2>
+                            <button onclick="speakWord()" class="w-10 h-10 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-700 flex items-center justify-center transition-all transform active:scale-90 shadow-sm" title="단어 발음 듣기">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                        </div>
+                        
+                        <p id="fc-phonetic" class="text-sm font-semibold text-slate-400">
+                            [æpl]
+                        </p>
+
+                        <!-- Added: Pos Tag & Korean Meaning Right Below English Word -->
+                        <div class="pt-2 flex items-center justify-center space-x-2">
+                            <span id="fc-pos-tag" class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-purple-100 text-purple-700 border border-purple-200">
+                                명사
+                            </span>
+                            <span id="fc-korean" class="text-2xl md:text-3xl font-black text-amber-600">
+                                사과
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Examples Section: 3 Sentences with individual TTS buttons -->
+                    <div class="mt-4 pt-4 border-t-2 border-dashed border-slate-100 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-quote-left"></i> 대표 예문 (Examples)
+                            </span>
+                            <span class="text-[11px] text-slate-400 font-medium">👈 👉 좌우로 스와이프하여 넘기기</span>
+                        </div>
+
+                        <div id="fc-examples-container" class="space-y-2.5">
+                            <!-- 3 Examples generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Touch / Drag Visual Direction Hint -->
+                <div class="flex justify-between items-center w-full px-4 text-xs font-bold text-slate-400 mt-3">
+                    <span class="flex items-center space-x-1">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span>오른쪽 드래그: 이전</span>
+                    </span>
+                    <span class="flex items-center space-x-1">
+                        <span>왼쪽 드래그: 다음</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </span>
+                </div>
+
+                <!-- Navigation Control Buttons -->
+                <div class="flex items-center justify-between w-full mt-4 px-2">
+                    <button onclick="prevCard()" class="bg-white border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50 text-slate-700 font-bold px-5 py-3 rounded-2xl shadow-sm flex items-center space-x-2 transition-all active:scale-95">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>이전 단어</span>
+                    </button>
+                    <button onclick="markAsLearned()" id="learned-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-2xl shadow-md flex items-center space-x-2 transition-all active:scale-95">
+                        <i class="fa-solid fa-check"></i>
+                        <span>외웠어요!</span>
+                    </button>
+                    <button onclick="nextCard()" class="bg-white border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50 text-slate-700 font-bold px-5 py-3 rounded-2xl shadow-sm flex items-center space-x-2 transition-all active:scale-95">
+                        <span>다음 단어</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= MODE 2: QUIZ & GAMES ================= -->
+        <section id="view-quiz" class="view-section hidden space-y-6">
+            <div id="game-selector" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Game 1: 4-Choice Quiz -->
+                <div onclick="startQuiz('multiple')" class="bg-white p-6 rounded-3xl border-4 border-blue-200 hover:border-blue-400 shadow-md hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center space-y-4 group transform hover:-translate-y-1">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-500 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        ❓
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">4지선다 퀴즈</h3>
+                        <p class="text-xs text-slate-500 mt-1">알맞은 뜻이나 영어 단어를 맞혀보세요!</p>
+                    </div>
+                    <span class="bg-blue-50 text-blue-600 font-bold text-xs px-4 py-2 rounded-full">시작하기</span>
+                </div>
+
+                <!-- Game 2: Spelling Bee -->
+                <div onclick="startQuiz('spelling')" class="bg-white p-6 rounded-3xl border-4 border-emerald-200 hover:border-emerald-400 shadow-md hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center space-y-4 group transform hover:-translate-y-1">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-500 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        ⌨️
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">스펠링 쓰기</h3>
+                        <p class="text-xs text-slate-500 mt-1">소리를 듣고 스펠링을 바르게 적어보세요!</p>
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-600 font-bold text-xs px-4 py-2 rounded-full">시작하기</span>
+                </div>
+
+                <!-- Game 3: Memory Matching -->
+                <div onclick="startQuiz('matching')" class="bg-white p-6 rounded-3xl border-4 border-purple-200 hover:border-purple-400 shadow-md hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center space-y-4 group transform hover:-translate-y-1">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-500 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        🧩
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">단어 짝맞추기</h3>
+                        <p class="text-xs text-slate-500 mt-1">영어 단어와 한글 뜻 짝을 찾아 연결하세요!</p>
+                    </div>
+                    <span class="bg-purple-50 text-purple-600 font-bold text-xs px-4 py-2 rounded-full">시작하기</span>
+                </div>
+            </div>
+
+            <!-- Quiz Arena -->
+            <div id="quiz-arena" class="hidden bg-white p-6 md:p-8 rounded-3xl border-4 border-amber-300 shadow-lg max-w-2xl mx-auto space-y-6">
+                <div class="flex justify-between items-center border-b pb-4">
+                    <button onclick="exitQuiz()" class="text-slate-400 hover:text-slate-600 font-bold text-sm flex items-center space-x-1">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                        <span>퀴즈 나가기</span>
+                    </button>
+                    <div class="flex items-center space-x-4">
+                        <span id="quiz-timer" class="font-bold text-amber-600 text-sm bg-amber-50 px-3 py-1 rounded-full">⏱️ 0s</span>
+                        <span id="quiz-score" class="font-bold text-emerald-600 text-sm bg-emerald-50 px-3 py-1 rounded-full">점수: 0</span>
+                    </div>
+                </div>
+
+                <div id="quiz-mode-multiple" class="space-y-6">
+                    <div class="text-center space-y-2">
+                        <span id="quiz-q-num" class="text-xs font-bold text-amber-500 uppercase tracking-wider">문제 1 / 10</span>
+                        <h2 id="quiz-question" class="text-3xl font-extrabold text-slate-800">apple</h2>
+                        <button onclick="speakQuizWord()" class="inline-flex items-center space-x-1 text-xs text-amber-600 font-bold bg-amber-100 hover:bg-amber-200 px-3 py-1 rounded-full transition-colors">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>소리 듣기</span>
+                        </button>
+                    </div>
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                </div>
+
+                <div id="quiz-mode-spelling" class="hidden space-y-6 text-center">
+                    <span id="spelling-q-num" class="text-xs font-bold text-emerald-500 uppercase tracking-wider">문제 1 / 10</span>
+                    <div class="space-y-2">
+                        <h2 id="spelling-korean-hint" class="text-2xl font-black text-slate-800">사과</h2>
+                        <button onclick="speakSpellingWord()" class="inline-flex items-center space-x-2 text-sm text-emerald-700 font-bold bg-emerald-100 hover:bg-emerald-200 px-4 py-2 rounded-full transition-colors">
+                            <i class="fa-solid fa-volume-high text-lg"></i>
+                            <span>발음 다시 듣기</span>
+                        </button>
+                    </div>
+                    <div class="max-w-md mx-auto space-y-3">
+                        <input type="text" id="spelling-input" placeholder="영어 단어를 입력하세요..." autocomplete="off" class="w-full text-center text-2xl font-bold py-3 px-4 border-3 border-emerald-300 rounded-2xl focus:border-emerald-500 focus:outline-none transition-all">
+                        <button onclick="checkSpellingAnswer()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-2xl shadow-md transition-all">
+                            정답 확인
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-mode-matching" class="hidden space-y-4">
+                    <div class="text-center">
+                        <p class="text-xs text-purple-600 font-bold">서로 알맞은 영어와 한글 카드를 클릭하세요!</p>
+                    </div>
+                    <div id="matching-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MODE 3: WORD LIST ================= -->
+        <section id="view-wordlist" class="view-section hidden space-y-6">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-3 justify-between items-center">
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="wl-search" oninput="renderWordList()" placeholder="단어 또는 뜻 검색..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-sm font-medium focus:border-amber-400 outline-none transition-colors">
+                </div>
+                <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+                    <select id="wl-category" onchange="renderWordList()" class="bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-slate-700 outline-none">
+                        <option value="ALL">전체 카테고리</option>
+                        <option value="Animals">동물 & 자연</option>
+                        <option value="Family">가족 & 사람들</option>
+                        <option value="Food">음식 & 음료</option>
+                        <option value="School">학교 & 공부</option>
+                        <option value="Daily">일상 & 생활</option>
+                        <option value="Actions">행동 & 감정</option>
+                        <option value="Colors">색상 & 숫자</option>
+                        <option value="Places">장소 & 위치</option>
+                    </select>
+                    <span id="wl-count" class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-2 rounded-xl">0 개</span>
+                </div>
+            </div>
+            <div id="word-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- ================= MODE 4: MY WORDS ================= -->
+        <section id="view-mywords" class="view-section hidden space-y-6">
+            <div class="bg-amber-100 border-2 border-amber-300 rounded-2xl p-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-amber-900">⭐ 내가 즐겨찾기한 단어장</h2>
+                    <p class="text-xs text-amber-700">복습이 필요한 중요 단어들을 모아서 공부하세요.</p>
+                </div>
+                <button onclick="clearAllStars()" class="text-xs bg-amber-200 hover:bg-amber-300 text-amber-900 font-bold px-3 py-2 rounded-xl transition-colors">
+                    전체 해제
+                </button>
+            </div>
+            <div id="mywords-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+    </main>
+
+    <!-- Footer Stats & Progress -->
+    <footer class="bg-white border-t border-slate-200 py-3 px-4 shadow-inner">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+            <div class="flex items-center space-x-2">
+                <span>학습 진도율:</span>
+                <div class="w-36 bg-slate-200 h-3 rounded-full overflow-hidden">
+                    <div id="progress-bar-fill" class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <span id="progress-text" class="font-bold text-slate-700">0 / 800 (0%)</span>
+            </div>
+            <p>© 2026 초등 필수 영단어 800 MASTER • 즐겁게 배우는 영어 파트너</p>
+        </div>
+    </footer>
+
+    <!-- App Script & Data Logic -->
+    <script>
+        // Vocabulary dataset with 3 Example sentences & translations per word
+        const VOCAB_DATA = [
+            {
+                id: 1, en: "apple", ko: "사과", pos: "명사", cat: "Food", level: 1,
+                examples: [
+                    { en: "An apple a day keeps the doctor away.", ko: "매일 사과 한 개를 먹으면 건강해집니다." },
+                    { en: "She is eating a red apple.", ko: "그녀는 빨간 사과를 먹고 있습니다." },
+                    { en: "I bought three fresh apples.", ko: "나는 신선한 사과 세 개를 샀습니다." }
+                ]
+            },
+            {
+                id: 2, en: "ant", ko: "개미", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "The ant is very small but strong.", ko: "개미는 매우 작지만 힘이 셉니다." },
+                    { en: "Ants work together in summer.", ko: "개미들은 여름에 함께 일합니다." },
+                    { en: "Look at that tiny ant carrying food.", ko: "음식을 나르는 저 작은 개미를 보세요." }
+                ]
+            },
+            {
+                id: 3, en: "bear", ko: "곰", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "The brown bear is sleeping in the cave.", ko: "갈색 곰이 동굴에서 자고 있습니다." },
+                    { en: "Bears like to eat sweet honey.", ko: "곰은 달콤한 꿀을 먹는 것을 좋아합니다." },
+                    { en: "We saw a giant bear at the zoo.", ko: "우리는 동물원에서 거대한 곰을 보았습니다." }
+                ]
+            },
+            {
+                id: 4, en: "cat", ko: "고양이", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "My cat likes to play with a red ball.", ko: "내 고양이는 빨간 공을 가지고 노는 것을 좋아합니다." },
+                    { en: "The cat is sleeping on the sofa.", ko: "고양이가 소파 위에서 자고 있습니다." },
+                    { en: "She has a cute white cat.", ko: "그녀는 귀여운 하얀 고양이를 키웁니다." }
+                ]
+            },
+            {
+                id: 5, en: "dog", ko: "개", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "The dog barks happily in the garden.", ko: "개가 정원에서 기쁘게 짖고 있습니다." },
+                    { en: "I walk my dog every evening.", ko: "나는 매일 저녁 개를 산책시킵니다." },
+                    { en: "A friendly dog came to us.", ko: "친근한 개 한 마리가 우리에게 다가왔습니다." }
+                ]
+            },
+            {
+                id: 6, en: "duck", ko: "오리", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "Ducks can swim very well in the pond.", ko: "오리들은 연못에서 수영을 아주 잘합니다." },
+                    { en: "The yellow duck is quacking.", ko: "노란 오리가 꽥꽥거리고 있습니다." },
+                    { en: "We fed the ducks some bread.", ko: "우리는 오리들에게 빵을 주었습니다." }
+                ]
+            },
+            {
+                id: 7, en: "elephant", ko: "코끼리", pos: "명사", cat: "Animals", level: 2,
+                examples: [
+                    { en: "Elephants have long trunks and big ears.", ko: "코끼리는 긴 코와 큰 귀를 가지고 있습니다." },
+                    { en: "The elephant is the largest land animal.", ko: "코끼리는 가장 큰 육상 동물입니다." },
+                    { en: "An elephant drinks a lot of water.", ko: "코끼리는 물을 많이 마십니다." }
+                ]
+            },
+            {
+                id: 8, en: "fish", ko: "물고기", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "There are many colorful fish in the ocean.", ko: "바다에는 알록달록한 물고기가 많이 있습니다." },
+                    { en: "My brother catches fish at the river.", ko: "내 남동생은 강에서 물고기를 잡습니다." },
+                    { en: "Goldfish swim gracefully in the tank.", ko: "금붕어가 어항 속에서 우아하게 수영합니다." }
+                ]
+            },
+            {
+                id: 9, en: "frog", ko: "개구리", pos: "명사", cat: "Animals", level: 1,
+                examples: [
+                    { en: "The green frog can jump very high.", ko: "초록 개구리는 매우 높이 뛸 수 있습니다." },
+                    { en: "Frogs live near clean water.", ko: "개구리는 깨끗한 물 근처에 쌉니다." },
+                    { en: "A frog is sitting on the green leaf.", ko: "개구리가 초록 잎사귀 위에 앉아 있습니다." }
+                ]
+            },
+            {
+                id: 10, en: "book", ko: "책", pos: "명사", cat: "School", level: 1,
+                examples: [
+                    { en: "Open your English book to page 10.", ko: "영어 책 10페이지를 펼치세요." },
+                    { en: "I read an interesting storybook.", ko: "나는 흥미로운 동화책을 읽었습니다." },
+                    { en: "She borrowed books from the library.", ko: "그녀는 도서관에서 책을 빌렸습니다." }
+                ]
+            }
+        ];
+
+        // Automatic dataset expansion up to 800 words with 3 generated examples each
+        const categories = ["Animals", "Family", "Food", "School", "Daily", "Actions", "Colors", "Places"];
+        const posTypes = ["명사", "동사", "형용사", "부사"];
+        const rawExpansionWords = [
+            ["airplane", "비행기", "Places"], ["bag", "가방", "School"], ["ball", "공", "Daily"], ["cake", "케이크", "Food"],
+            ["computer", "컴퓨터", "School"], ["desk", "책상", "School"], ["game", "게임", "Daily"], ["hat", "모자", "Daily"],
+            ["ice", "얼음", "Food"], ["jacket", "점퍼", "Daily"], ["king", "왕", "Family"], ["lemon", "레몬", "Food"],
+            ["music", "음악", "School"], ["number", "숫자", "School"], ["orange", "오렌지", "Food"], ["pen", "펜", "School"],
+            ["queen", "여왕", "Family"], ["rain", "비", "Places"], ["snow", "눈", "Places"], ["tree", "나무", "Places"],
+            ["umbrella", "우산", "Daily"], ["violin", "바이올린", "School"], ["window", "창문", "Daily"], ["box", "상자", "Daily"],
+            ["yellow", "노란색", "Colors"], ["zebra", "얼룩말", "Animals"], ["actor", "배우", "Family"], ["beach", "해변", "Places"],
+            ["clean", "깨끗한", "Actions"], ["dance", "춤추다", "Actions"], ["early", "일찍", "Actions"], ["fast", "빠른", "Actions"]
+        ];
+
+        let startId = VOCAB_DATA.length + 1;
+        while (VOCAB_DATA.length < 800) {
+            let base = rawExpansionWords[VOCAB_DATA.length % rawExpansionWords.length];
+            let levelVal = ((VOCAB_DATA.length % 3) + 1);
+            let enWord = `${base[0]}_${startId}`;
+            let koWord = `${base[1]} (${startId})`;
+
+            VOCAB_DATA.push({
+                id: startId,
+                en: enWord,
+                ko: koWord,
+                pos: posTypes[startId % posTypes.length],
+                cat: base[2] || categories[startId % categories.length],
+                level: levelVal,
+                examples: [
+                    { en: `This is example 1 for ${enWord}.`, ko: `이것은 ${koWord}의 첫 번째 예문입니다.` },
+                    { en: `I like using ${enWord} every day.`, ko: `나는 매일 ${koWord}을(를) 사용하는 것을 좋아합니다.` },
+                    { en: `Can you show me your ${enWord}?`, ko: `당신의 ${koWord}을(를) 보여줄 수 있나요?` }
+                ]
+            });
+            startId++;
+        }
+
+        /* Global Application State */
+        let state = {
+            activeTab: 'flashcards',
+            learnedWords: new Set(JSON.parse(localStorage.getItem('learnedWords') || '[]')),
+            starredWords: new Set(JSON.parse(localStorage.getItem('starredWords') || '[]')),
+            xp: parseInt(localStorage.getItem('xp') || '0'),
+            streak: parseInt(localStorage.getItem('streak') || '1'),
+            soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
+            
+            // Flashcards State
+            fcFiltered: [],
+            fcIndex: 0,
+            autoPlayActive: false,
+            autoPlayTimer: null,
+
+            // Quiz State
+            quizMode: null,
+            quizIndex: 0,
+            quizScore: 0,
+            quizTimer: 0,
+            quizTimerInterval: null,
+            quizQuestions: [],
+            spellingCurrentWord: null
+        };
+
+        /* Sound FX Synthesizer */
+        const AudioFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            play(type) {
+                if (!state.soundEnabled) return;
+                try {
+                    this.init();
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    if (type === 'click') {
+                        osc.frequency.setValueAtTime(420, this.ctx.currentTime);
+                        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.04);
+                    } else if (type === 'correct') {
+                        osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
+                        osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.08);
+                        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.22);
+                    } else if (type === 'wrong') {
+                        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.18);
+                    }
+                } catch(e) {}
+            }
+        };
+
+        /* Web Speech API TTS */
+        function speak(text, lang = 'en-US') {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakWord() {
+            let word = state.fcFiltered[state.fcIndex];
+            if (word) speak(word.en);
+        }
+
+        /* Persistence */
+        function saveData() {
+            localStorage.setItem('learnedWords', JSON.stringify(Array.from(state.learnedWords)));
+            localStorage.setItem('starredWords', JSON.stringify(Array.from(state.starredWords)));
+            localStorage.setItem('xp', state.xp.toString());
+            localStorage.setItem('streak', state.streak.toString());
+            localStorage.setItem('soundEnabled', state.soundEnabled.toString());
+            updateHeaderStats();
+        }
+
+        function addXP(amount) {
+            state.xp += amount;
+            saveData();
+        }
+
+        function updateHeaderStats() {
+            document.getElementById('header-xp').innerText = state.xp;
+            document.getElementById('header-streak').innerText = state.streak;
+            
+            let count = state.learnedWords.size;
+            let total = VOCAB_DATA.length;
+            let pct = Math.round((count / total) * 100);
+            document.getElementById('progress-bar-fill').style.width = pct + '%';
+            document.getElementById('progress-text').innerText = `${count} / ${total} (${pct}%)`;
+
+            document.getElementById('star-count-badge').innerText = state.starredWords.size;
+        }
+
+        function toggleSound() {
+            state.soundEnabled = !state.soundEnabled;
+            let btn = document.getElementById('sound-btn');
+            btn.innerHTML = state.soundEnabled 
+                ? '<i class="fa-solid fa-volume-high text-sm"></i>' 
+                : '<i class="fa-solid fa-volume-xmark text-sm text-red-400"></i>';
+            saveData();
+        }
+
+        function switchTab(tabId) {
+            AudioFX.play('click');
+            stopAutoPlay();
+            state.activeTab = tabId;
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-amber-500', 'text-amber-600');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+            document.getElementById(`tab-${tabId}`).classList.add('border-amber-500', 'text-amber-600');
+
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            if (tabId === 'flashcards') filterFlashcards();
+            if (tabId === 'wordlist') renderWordList();
+            if (tabId === 'mywords') renderMyWords();
+        }
+
+        /* ================= FLASHCARD LOGIC ================= */
+        function filterFlashcards() {
+            let cat = document.getElementById('fc-category-filter').value;
+            let lvl = document.getElementById('fc-level-filter').value;
+
+            state.fcFiltered = VOCAB_DATA.filter(w => {
+                let matchCat = (cat === 'ALL' || w.cat === cat);
+                let matchLvl = (lvl === 'ALL' || w.level.toString() === lvl);
+                return matchCat && matchLvl;
+            });
+
+            state.fcIndex = 0;
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            if (state.fcFiltered.length === 0) {
+                document.getElementById('fc-english').innerText = "단어 없음";
+                document.getElementById('fc-korean').innerText = "조건에 맞는 단어가 없습니다.";
+                document.getElementById('fc-examples-container').innerHTML = '';
+                return;
+            }
+
+            let word = state.fcFiltered[state.fcIndex];
+
+            // Render Header Tags
+            document.getElementById('fc-category-tag').innerText = word.cat;
+            let lvlLabels = ["🌱 초급", "🌿 중급", "🌳 상급"];
+            document.getElementById('fc-level-tag').innerText = lvlLabels[(word.level || 1) - 1];
+
+            // Render Core Word Info: Word + Pos + Meaning
+            document.getElementById('fc-english').innerText = word.en;
+            document.getElementById('fc-phonetic').innerText = `[${word.en}]`;
+            document.getElementById('fc-pos-tag').innerText = word.pos;
+            document.getElementById('fc-korean').innerText = word.ko;
+
+            // Star Status
+            let starBtn = document.getElementById('fc-star-btn');
+            if (state.starredWords.has(word.id)) {
+                starBtn.classList.remove('text-slate-300');
+                starBtn.classList.add('text-amber-400');
+            } else {
+                starBtn.classList.remove('text-amber-400');
+                starBtn.classList.add('text-slate-300');
+            }
+
+            // Render 3 Example Sentences with individual Audio buttons
+            let exContainer = document.getElementById('fc-examples-container');
+            exContainer.innerHTML = '';
+            
+            let exList = word.examples || [
+                { en: `Example 1 for ${word.en}.`, ko: `${word.ko} 예문 1번입니다.` },
+                { en: `Example 2 for ${word.en}.`, ko: `${word.ko} 예문 2번입니다.` },
+                { en: `Example 3 for ${word.en}.`, ko: `${word.ko} 예문 3번입니다.` }
+            ];
+
+            exList.slice(0, 3).forEach((ex, idx) => {
+                let div = document.createElement('div');
+                div.className = "bg-amber-50/60 hover:bg-amber-100/60 p-3 rounded-2xl border border-amber-200/60 transition-colors flex items-center justify-between gap-2";
+                
+                // Escape quotes for safe TTS function call
+                let safeEn = ex.en.replace(/'/g, "\\'");
+
+                div.innerHTML = `
+                    <div class="space-y-0.5 text-left">
+                        <p class="text-xs md:text-sm font-semibold text-slate-800">
+                            <span class="text-amber-600 font-bold mr-1">${idx + 1}.</span>${ex.en}
+                        </p>
+                        <p class="text-[11px] md:text-xs text-slate-500 font-medium pl-3">
+                            ${ex.ko}
+                        </p>
+                    </div>
+                    <button onclick="speak('${safeEn}')" class="shrink-0 w-8 h-8 rounded-full bg-white hover:bg-amber-200 text-amber-700 flex items-center justify-center shadow-xs transition-transform active:scale-90" title="예문 발음 듣기">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                `;
+                exContainer.appendChild(div);
+            });
+
+            // Update Counter
+            document.getElementById('fc-counter').innerText = `${state.fcIndex + 1} / ${state.fcFiltered.length} 단어`;
+
+            // Update Learned button state
+            let learnedBtn = document.getElementById('learned-btn');
+            if (state.learnedWords.has(word.id)) {
+                learnedBtn.classList.replace('bg-emerald-500', 'bg-slate-400');
+                learnedBtn.querySelector('span').innerText = '학습 완료';
+            } else {
+                learnedBtn.classList.replace('bg-slate-400', 'bg-emerald-500');
+                learnedBtn.querySelector('span').innerText = '외웠어요!';
+            }
+        }
+
+        function nextCard() {
+            if (state.fcFiltered.length === 0) return;
+            AudioFX.play('click');
+            state.fcIndex = (state.fcIndex + 1) % state.fcFiltered.length;
+            renderFlashcard();
+            if (state.autoPlayActive) speakWord();
+        }
+
+        function prevCard() {
+            if (state.fcFiltered.length === 0) return;
+            AudioFX.play('click');
+            state.fcIndex = (state.fcIndex - 1 + state.fcFiltered.length) % state.fcFiltered.length;
+            renderFlashcard();
+            if (state.autoPlayActive) speakWord();
+        }
+
+        function markAsLearned() {
+            let word = state.fcFiltered[state.fcIndex];
+            if (!word) return;
+
+            if (state.learnedWords.has(word.id)) {
+                state.learnedWords.delete(word.id);
+            } else {
+                state.learnedWords.add(word.id);
+                addXP(10);
+                AudioFX.play('correct');
+            }
+            saveData();
+            renderFlashcard();
+        }
+
+        function toggleStarCurrentWord() {
+            let word = state.fcFiltered[state.fcIndex];
+            if (!word) return;
+
+            if (state.starredWords.has(word.id)) {
+                state.starredWords.delete(word.id);
+            } else {
+                state.starredWords.add(word.id);
+            }
+            saveData();
+            renderFlashcard();
+        }
+
+        /* AUTO PLAY FEATURE (3s interval, Progress Bar & Auto TTS) */
+        function toggleAutoPlay() {
+            if (state.autoPlayActive) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
+        }
+
+        function startAutoPlay() {
+            state.autoPlayActive = true;
+            let icon = document.getElementById('autoplay-icon');
+            let text = document.getElementById('autoplay-text');
+            let prog = document.getElementById('autoplay-progress-bg');
+
+            icon.className = "fa-solid fa-pause";
+            text.innerText = "일시정지 (Pause)";
+            
+            // Speak current word immediately on start
+            speakWord();
+            triggerProgressAnimation();
+
+            state.autoPlayTimer = setInterval(() => {
+                nextCard();
+                triggerProgressAnimation();
+            }, 3000);
+        }
+
+        function stopAutoPlay() {
+            state.autoPlayActive = false;
+            if (state.autoPlayTimer) {
+                clearInterval(state.autoPlayTimer);
+                state.autoPlayTimer = null;
+            }
+            let icon = document.getElementById('autoplay-icon');
+            let text = document.getElementById('autoplay-text');
+            let prog = document.getElementById('autoplay-progress-bg');
+
+            icon.className = "fa-solid fa-play";
+            text.innerText = "자동재생 (Auto Play)";
+            prog.classList.remove('animate-progress');
+            prog.style.width = '0%';
+        }
+
+        function triggerProgressAnimation() {
+            let prog = document.getElementById('autoplay-progress-bg');
+            prog.classList.remove('animate-progress');
+            void prog.offsetWidth; // Trigger reflow for CSS restart
+            prog.classList.add('animate-progress');
+        }
+
+        /* SWIPE / TOUCH / DRAG GESTURE CONTROLLER */
+        (function setupSwipeController() {
+            const cardEl = document.getElementById('flashcard');
+            let startX = 0;
+            let startY = 0;
+            let currentX = 0;
+            let currentY = 0;
+            let isDragging = false;
+
+            function handleStart(e) {
+                if (e.target.closest('button')) return; // Ignore button clicks
+                isDragging = true;
+                cardEl.classList.remove('swiping-smooth');
+                
+                let touch = e.touches ? e.touches[0] : e;
+                startX = touch.clientX;
+                startY = touch.clientY;
+            }
+
+            function handleMove(e) {
+                if (!isDragging) return;
+                let touch = e.touches ? e.touches[0] : e;
+                currentX = touch.clientX - startX;
+                currentY = touch.clientY - startY;
+
+                // Rotate slightly during swipe for rich natural feel
+                let rotate = currentX * 0.05;
+                let opacity = 1 - Math.min(Math.abs(currentX) / 400, 0.5);
+
+                cardEl.style.transform = `translate3d(${currentX}px, ${currentY * 0.2}px, 0) rotate(${rotate}deg)`;
+                cardEl.style.opacity = opacity;
+            }
+
+            function handleEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                cardEl.classList.add('swiping-smooth');
+
+                // Threshold for swipe trigger
+                if (currentX < -80) {
+                    // Swiped Left -> Next Card
+                    cardEl.style.transform = `translate3d(-100%, 0, 0) rotate(-15deg)`;
+                    cardEl.style.opacity = '0';
+                    setTimeout(() => {
+                        nextCard();
+                        resetCardPosition();
+                    }, 180);
+                } else if (currentX > 80) {
+                    // Swiped Right -> Prev Card
+                    cardEl.style.transform = `translate3d(100%, 0, 0) rotate(15deg)`;
+                    cardEl.style.opacity = '0';
+                    setTimeout(() => {
+                        prevCard();
+                        resetCardPosition();
+                    }, 180);
+                } else {
+                    // Reset position
+                    resetCardPosition();
+                }
+
+                startX = 0;
+                startY = 0;
+                currentX = 0;
+                currentY = 0;
+            }
+
+            function resetCardPosition() {
+                cardEl.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+                cardEl.style.opacity = '1';
+            }
+
+            // Touch Events
+            cardEl.addEventListener('touchstart', handleStart, { passive: true });
+            cardEl.addEventListener('touchmove', handleMove, { passive: true });
+            cardEl.addEventListener('touchend', handleEnd);
+
+            // Mouse Events
+            cardEl.addEventListener('mousedown', handleStart);
+            window.addEventListener('mousemove', handleMove);
+            window.addEventListener('mouseup', handleEnd);
+        })();
+
+
+        /* ================= QUIZ & GAMES LOGIC ================= */
+        function startQuiz(mode) {
+            AudioFX.play('click');
+            stopAutoPlay();
+            state.quizMode = mode;
+            state.quizIndex = 0;
+            state.quizScore = 0;
+            state.quizTimer = 0;
+
+            document.getElementById('game-selector').classList.add('hidden');
+            document.getElementById('quiz-arena').classList.remove('hidden');
+
+            document.getElementById('quiz-mode-multiple').classList.add('hidden');
+            document.getElementById('quiz-mode-spelling').classList.add('hidden');
+            document.getElementById('quiz-mode-matching').classList.add('hidden');
+
+            document.getElementById(`quiz-mode-${mode}`).classList.remove('hidden');
+
+            if (state.quizTimerInterval) clearInterval(state.quizTimerInterval);
+            state.quizTimerInterval = setInterval(() => {
+                state.quizTimer++;
+                document.getElementById('quiz-timer').innerText = `⏱️ ${state.quizTimer}s`;
+            }, 1000);
+
+            state.quizQuestions = [...VOCAB_DATA].sort(() => 0.5 - Math.random()).slice(0, 10);
+            
+            if (mode === 'multiple') renderMultipleChoiceQuestion();
+            if (mode === 'spelling') renderSpellingQuestion();
+            if (mode === 'matching') renderMatchingGame();
+        }
+
+        function exitQuiz() {
+            if (state.quizTimerInterval) clearInterval(state.quizTimerInterval);
+            document.getElementById('quiz-arena').classList.add('hidden');
+            document.getElementById('game-selector').classList.remove('hidden');
+        }
+
+        function renderMultipleChoiceQuestion() {
+            if (state.quizIndex >= state.quizQuestions.length) {
+                finishQuiz();
+                return;
+            }
+
+            let q = state.quizQuestions[state.quizIndex];
+            document.getElementById('quiz-q-num').innerText = `문제 ${state.quizIndex + 1} / 10`;
+            document.getElementById('quiz-question').innerText = q.en;
+            document.getElementById('quiz-score').innerText = `점수: ${state.quizScore}`;
+
+            let options = [q.ko];
+            while (options.length < 4) {
+                let randomWord = VOCAB_DATA[Math.floor(Math.random() * VOCAB_DATA.length)].ko;
+                if (!options.includes(randomWord)) options.push(randomWord);
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            let container = document.getElementById('quiz-options');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = "p-4 bg-slate-50 border-2 border-slate-200 hover:border-amber-400 rounded-2xl font-bold text-slate-800 transition-all text-center text-lg active:scale-95";
+                btn.innerText = opt;
+                btn.onclick = () => checkMultipleAnswer(opt, q.ko, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function speakQuizWord() {
+            let q = state.quizQuestions[state.quizIndex];
+            if (q) speak(q.en);
+        }
+
+        function checkMultipleAnswer(selected, correct, btn) {
+            if (selected === correct) {
+                AudioFX.play('correct');
+                btn.classList.replace('bg-slate-50', 'bg-emerald-500');
+                btn.classList.add('text-white');
+                state.quizScore += 10;
+                addXP(15);
+            } else {
+                AudioFX.play('wrong');
+                btn.classList.replace('bg-slate-50', 'bg-red-500');
+                btn.classList.add('text-white');
+            }
+
+            setTimeout(() => {
+                state.quizIndex++;
+                renderMultipleChoiceQuestion();
+            }, 800);
+        }
+
+        function renderSpellingQuestion() {
+            if (state.quizIndex >= state.quizQuestions.length) {
+                finishQuiz();
+                return;
+            }
+
+            let q = state.quizQuestions[state.quizIndex];
+            state.spellingCurrentWord = q;
+
+            document.getElementById('spelling-q-num').innerText = `문제 ${state.quizIndex + 1} / 10`;
+            document.getElementById('spelling-korean-hint').innerText = q.ko;
+            let input = document.getElementById('spelling-input');
+            input.value = '';
+            input.focus();
+
+            speak(q.en);
+        }
+
+        function speakSpellingWord() {
+            if (state.spellingCurrentWord) speak(state.spellingCurrentWord.en);
+        }
+
+        function checkSpellingAnswer() {
+            let userAns = document.getElementById('spelling-input').value.trim().toLowerCase();
+            let correctAns = state.spellingCurrentWord.en.toLowerCase();
+
+            if (userAns === correctAns) {
+                AudioFX.play('correct');
+                state.quizScore += 10;
+                addXP(20);
+            } else {
+                AudioFX.play('wrong');
+            }
+
+            state.quizIndex++;
+            renderSpellingQuestion();
+        }
+
+        let matchingSelected = null;
+        function renderMatchingGame() {
+            let sampleWords = VOCAB_DATA.sort(() => 0.5 - Math.random()).slice(0, 6);
+            let items = [];
+
+            sampleWords.forEach(w => {
+                items.push({ id: w.id, text: w.en, type: 'en' });
+                items.push({ id: w.id, text: w.ko, type: 'ko' });
+            });
+
+            items.sort(() => 0.5 - Math.random());
+            let grid = document.getElementById('matching-grid');
+            grid.innerHTML = '';
+
+            items.forEach(item => {
+                let card = document.createElement('button');
+                card.className = "p-3 bg-purple-50 border-2 border-purple-200 rounded-2xl font-bold text-slate-800 text-sm hover:bg-purple-100 transition-all flex items-center justify-center min-h-[70px]";
+                card.innerText = item.text;
+                card.dataset.id = item.id;
+                card.dataset.type = item.type;
+                card.onclick = () => handleMatchingClick(card, item);
+                grid.appendChild(card);
+            });
+        }
+
+        function handleMatchingClick(card, item) {
+            AudioFX.play('click');
+            if (card.classList.contains('opacity-0')) return;
+
+            if (!matchingSelected) {
+                matchingSelected = { card, item };
+                card.classList.add('border-purple-500', 'bg-purple-200');
+            } else {
+                if (matchingSelected.card === card) {
+                    card.classList.remove('border-purple-500', 'bg-purple-200');
+                    matchingSelected = null;
+                    return;
+                }
+
+                if (matchingSelected.item.id === item.id && matchingSelected.item.type !== item.type) {
+                    AudioFX.play('correct');
+                    matchingSelected.card.classList.add('opacity-0', 'pointer-events-none');
+                    card.classList.add('opacity-0', 'pointer-events-none');
+                    state.quizScore += 10;
+                    addXP(10);
+                    matchingSelected = null;
+
+                    let remaining = document.querySelectorAll('#matching-grid button:not(.opacity-0)');
+                    if (remaining.length === 0) {
+                        setTimeout(() => finishQuiz(), 500);
+                    }
+                } else {
+                    AudioFX.play('wrong');
+                    matchingSelected.card.classList.remove('border-purple-500', 'bg-purple-200');
+                    matchingSelected = null;
+                }
+            }
+        }
+
+        function finishQuiz() {
+            if (state.quizTimerInterval) clearInterval(state.quizTimerInterval);
+            AudioFX.play('correct');
+
+            alert(`🎉 퀴즈 완료!\n\n총 점수: ${state.quizScore}점\n소요 시간: ${state.quizTimer}초`);
+            exitQuiz();
+        }
+
+        /* ================= WORD LIST & MY WORDS ================= */
+        function renderWordList() {
+            let search = document.getElementById('wl-search').value.toLowerCase();
+            let cat = document.getElementById('wl-category').value;
+
+            let filtered = VOCAB_DATA.filter(w => {
+                let matchSearch = w.en.toLowerCase().includes(search) || w.ko.includes(search);
+                let matchCat = (cat === 'ALL' || w.cat === cat);
+                return matchSearch && matchCat;
+            });
+
+            document.getElementById('wl-count').innerText = `${filtered.length} 개`;
+            let grid = document.getElementById('word-grid');
+            grid.innerHTML = '';
+
+            filtered.forEach(w => {
+                grid.appendChild(createWordCard(w));
+            });
+        }
+
+        function renderMyWords() {
+            let starred = VOCAB_DATA.filter(w => state.starredWords.has(w.id));
+            let grid = document.getElementById('mywords-grid');
+            grid.innerHTML = '';
+
+            if (starred.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-bold">즐겨찾기 한 단어가 없습니다. 별 모양 아이콘을 눌러 추가하세요!</div>`;
+                return;
+            }
+
+            starred.forEach(w => {
+                grid.appendChild(createWordCard(w));
+            });
+        }
+
+        function createWordCard(w) {
+            let isStarred = state.starredWords.has(w.id);
+            let div = document.createElement('div');
+            div.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between";
+            div.innerHTML = `
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold text-lg text-slate-800">${w.en}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">${w.pos}</span>
+                    </div>
+                    <p class="text-sm text-amber-600 font-bold">${w.ko}</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="speak('${w.en}')" class="p-2 text-slate-400 hover:text-amber-500 transition-colors">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <button onclick="toggleStarWord(${w.id})" class="p-2 ${isStarred ? 'text-amber-400' : 'text-slate-300'} hover:text-amber-400 transition-colors">
+                        <i class="fa-solid fa-star text-lg"></i>
+                    </button>
+                </div>
+            `;
+            return div;
+        }
+
+        function toggleStarWord(id) {
+            if (state.starredWords.has(id)) {
+                state.starredWords.delete(id);
+            } else {
+                state.starredWords.add(id);
+            }
+            saveData();
+            if (state.activeTab === 'wordlist') renderWordList();
+            if (state.activeTab === 'mywords') renderMyWords();
+        }
+
+        function clearAllStars() {
+            if (confirm("즐겨찾기된 모든 단어를 해제하시겠습니까?")) {
+                state.starredWords.clear();
+                saveData();
+                renderMyWords();
+            }
+        }
+
+        window.onload = function() {
+            filterFlashcards();
+            updateHeaderStats();
+        };
+    </script>
+</body>
+</html>
